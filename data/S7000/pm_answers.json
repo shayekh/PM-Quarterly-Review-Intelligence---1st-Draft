@@ -1,0 +1,17 @@
+{
+  "role": "PM",
+  "project": "S7000",
+  "quarter": "Q2",
+  "year": "2026",
+  "submitted_at": "2026-06-23T04:28:34.209356",
+  "answers": {
+    "executive_summary": "Customer Portal Prod & SAM Enhancement",
+    "overall_status": "Amber",
+    "key_achievements": "Customer portal live on prod and some enhancement is ongoing for sam",
+    "risks_and_challenges": "decision making delay from client side and delayed the deployment",
+    "quality_and_team_health": "I will say average"
+  },
+  "stakeholder_emails": [
+    "shayekhevan@gmail.com"
+  ]
+}

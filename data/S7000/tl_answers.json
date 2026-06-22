@@ -1,0 +1,14 @@
+{
+  "role": "TL",
+  "project": "S7000",
+  "quarter": "Q2",
+  "year": "2026",
+  "submitted_at": "2026-06-23T04:31:42.028769",
+  "answers": {
+    "executive_summary": "Customer Portal production and SAM enhancement",
+    "overall_status": "Green",
+    "key_achievements": "Customer Portal Production",
+    "risks_and_challenges": "Code refactor issues and frequent bugs",
+    "quality_and_team_health": "Due to marketing team frequent request for changes from client side, it delayed"
+  }
+}

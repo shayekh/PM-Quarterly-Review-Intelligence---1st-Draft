@@ -1,0 +1,11 @@
+{
+  "project": "S7000",
+  "quarter": "Q2",
+  "year": "2026",
+  "sent_at": "2026-06-23T04:35:30.555520",
+  "recipients": [
+    "shayekhevan@gmail.com"
+  ],
+  "status": "sent",
+  "test_mode": true
+}
