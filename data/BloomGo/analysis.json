@@ -1,0 +1,117 @@
+{
+  "project": "BloomGo",
+  "quarter": "Q2",
+  "year": "2026",
+  "generated_at": "2026-06-23T15:31:53.002357",
+  "section_findings": [
+    {
+      "question": "executive_summary",
+      "pm_answer": "launch bloomgo app and admin panel",
+      "tl_answer": "app deployment and admin panel on prod",
+      "relationship": "AGREE",
+      "finding": "PM and Tech Lead both see executive summary the same way \u2014 a confirmed, strong signal."
+    },
+    {
+      "question": "overall_status",
+      "pm_answer": "Green",
+      "tl_answer": "Amber",
+      "relationship": "DISAGREE",
+      "finding": "PM and Tech Lead describe overall status very differently, pointing to a misalignment that needs to be reconciled."
+    },
+    {
+      "question": "key_achievements",
+      "pm_answer": "app on prod and adin panel as well",
+      "tl_answer": "all on production",
+      "relationship": "COMPLEMENT",
+      "finding": "PM and Tech Lead bring different but complementary angles on key achievements & value delivered, which together give a fuller picture."
+    },
+    {
+      "question": "risks_and_challenges",
+      "pm_answer": "procurement issue from clients",
+      "tl_answer": "need to solve few bugs",
+      "relationship": "COMPLEMENT",
+      "finding": "PM and Tech Lead bring different but complementary angles on risks, issues & challenges, which together give a fuller picture."
+    },
+    {
+      "question": "quality_and_team_health",
+      "pm_answer": "so far balanced",
+      "tl_answer": "good to go",
+      "relationship": "COMPLEMENT",
+      "finding": "PM and Tech Lead bring different but complementary angles on quality & team health, which together give a fuller picture."
+    }
+  ],
+  "patterns": {
+    "recurring_themes": [
+      "'app' comes up repeatedly across PM and Tech Lead answers",
+      "'panel' comes up repeatedly across PM and Tech Lead answers",
+      "'admin' comes up repeatedly across PM and Tech Lead answers",
+      "'prod' comes up repeatedly across PM and Tech Lead answers"
+    ],
+    "critical_misalignments": [
+      "Overall Status: PM and Tech Lead describe overall status very differently, pointing to a misalignment that needs to be reconciled."
+    ],
+    "strengths": [
+      "Executive Summary: PM and Tech Lead both see executive summary the same way \u2014 a confirmed, strong signal."
+    ],
+    "risks": [
+      "Overall Status: PM and Tech Lead describe overall status very differently, pointing to a misalignment that needs to be reconciled.",
+      "Risks, Issues & Challenges: PM and Tech Lead bring different but complementary angles on risks, issues & challenges, which together give a fuller picture."
+    ]
+  },
+  "lessons_learned": [
+    {
+      "lesson": "Executive Summary is a confirmed strong point this quarter.",
+      "context": "Both PM and Tech Lead independently described it the same way.",
+      "action": "Keep doing whatever is driving alignment on executive summary."
+    },
+    {
+      "lesson": "PM and Tech Lead need a shared definition of 'Overall Status'.",
+      "context": "PM said: \"Green\" while Tech Lead said: \"Amber\" \u2014 the contradiction suggests misaligned visibility.",
+      "action": "Hold a short alignment conversation on overall status before next quarter starts."
+    },
+    {
+      "lesson": "Continue strengthening shared visibility between PM and Tech Lead.",
+      "context": "Overall, this quarter's answers were broadly consistent in tone and substance.",
+      "action": "Maintain regular sync points between PM and Tech Lead."
+    }
+  ],
+  "next_quarter_focus": [
+    {
+      "focus_area": "Resolve misalignment on overall status",
+      "expected_outcome": "PM and Tech Lead share one consistent view going into next quarter.",
+      "owner": "Both"
+    },
+    {
+      "focus_area": "Keep combining both views on key achievements & value delivered",
+      "expected_outcome": "The richer, combined picture continues informing decisions.",
+      "owner": "Both"
+    },
+    {
+      "focus_area": "Keep combining both views on risks, issues & challenges",
+      "expected_outcome": "The richer, combined picture continues informing decisions.",
+      "owner": "Both"
+    },
+    {
+      "focus_area": "Keep combining both views on quality & team health",
+      "expected_outcome": "The richer, combined picture continues informing decisions.",
+      "owner": "Both"
+    }
+  ],
+  "management_attention": [
+    {
+      "item": "Disagreement on Overall Status",
+      "type": "Misalignment",
+      "explanation": "PM and Tech Lead gave conflicting accounts of overall status. PM: \"Green\" | TL: \"Amber\".",
+      "urgency": "High",
+      "source": "Disagreement"
+    },
+    {
+      "item": "Recurring risk themes flagged this quarter",
+      "type": "Escalation",
+      "explanation": "Overall Status: PM and Tech Lead describe overall status very differently, pointing to a misalignment that needs to be reconciled.; Risks, Issues & Challenges: PM and Tech Lead bring different but complementary angles on risks, issues & challenges, which together give a fuller picture.",
+      "urgency": "Medium",
+      "source": "Both"
+    }
+  ],
+  "closing_note": "This quarter for BloomGo closed with a disputed overall status (PM: Green, Tech Lead: Amber), drawing on independent input from both the Product Manager and the Tech Lead. Across the five review areas, 1 showed strong alignment between both perspectives, while 1 surfaced clear disagreements that need to be reconciled.\n\nTaken together, the PM and Tech Lead perspectives tell a single, coherent story of where delivery, technical health, and team wellbeing stood this quarter rather than two competing narratives. Where the two sides agreed, those points should be treated as dependable signal; where they diverged, that gap itself is the most useful finding of this review.\n\nHeading into next quarter, the priority is to close any open misalignments early, keep reinforcing what is already working, and ensure both PM and Tech Lead continue reporting with the same level of detail and visibility."
+}

@@ -11,7 +11,29 @@
 cd "C:\Users\DELL\OneDrive\Desktop\pm-q-session-oc"
 ```
 
-### Step 2 — PM Turn
+### Step 2 — Run the master orchestrator (recommended)
+```bash
+python scripts/run.py
+```
+This single command drives the whole workflow. It will ask:
+1. **What would you like to do?**
+   - `1` — Full automatic workflow (PM + TL + Analysis + PDF + Email)
+   - `2` — PM turn only
+   - `3` — TL turn only
+   - `4` — Run analysis only
+   - `5` — Generate PDF only
+   - `6` — Send email only
+2. **Enter project name** — e.g. `S7000`
+
+For option `1`, `run.py` walks through both the PM and TL Q&A sessions back to back, then runs analysis, generates the PDF, and sends the email — printing a step-by-step progress banner and a final summary box. If any step fails, it will ask whether to retry that step before giving up.
+
+Options `2`–`6` run a single stage, with the same pre-checks as running each script manually (e.g. option `3` checks that the PM has already submitted before letting the TL start).
+
+> Prefer to drive the steps yourself instead? See [Manual Commands](#manual-commands-if-needed) below — `questionnaire.py`, `agent.py`, `generate_pdf.py`, and `scheduler.py` all still work exactly as standalone scripts.
+
+### Manual alternative — Step by step
+
+#### PM Turn
 ```bash
 python scripts/questionnaire.py
 ```
@@ -20,7 +42,7 @@ python scripts/questionnaire.py
 - Answer 5 questions
 - Enter stakeholder emails at the end
 
-### Step 3 — Tech Lead Turn
+#### Tech Lead Turn
 ```bash
 python scripts/questionnaire.py
 ```
@@ -59,6 +81,11 @@ python scripts/scheduler.py S7000
 ```
 
 Replace `S7000` with your actual project name.
+
+Equivalent single-stage commands via the orchestrator:
+```bash
+python scripts/run.py   # then choose 4 (analysis), 5 (PDF), or 6 (email)
+```
 
 ---
 
@@ -132,6 +159,7 @@ TEST_MODE=True
 | `Can only send to own email` | Use your Resend signup email as stakeholder OR verify a domain |
 | `PDF not found` | Run `python scripts/generate_pdf.py ProjectName` manually |
 | `Module not found` | Run `pip install reportlab resend python-dotenv` |
+| A step fails inside `run.py` | It will ask `Would you like to retry? (y/n)` — fix the issue, then type `y` |
 
 ---
 

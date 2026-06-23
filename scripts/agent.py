@@ -106,7 +106,7 @@ def load_submissions(project):
         print(f"Error: missing submission(s) for '{project}'.")
         print(f"  pm_answers.json found: {os.path.exists(pm_path)}")
         print(f"  tl_answers.json found: {os.path.exists(tl_path)}")
-        sys.exit(1)
+        return None, None
 
     with open(pm_path, "r", encoding="utf-8") as f:
         pm = json.load(f)
@@ -472,13 +472,11 @@ def strip_internal_fields(items):
     return [{k: v for k, v in item.items() if not k.startswith("_")} for item in items]
 
 
-def main():
-    project = sys.argv[1] if len(sys.argv) > 1 else find_latest_project()
-    if not project:
-        print("Error: no project specified and no project with both submissions was found.")
-        sys.exit(1)
-
+def run_agent(project, auto_chain=True):
+    """Runs the 4-step analysis for `project`. Returns True on success, False on failure."""
     pm, tl = load_submissions(project)
+    if pm is None or tl is None:
+        return False
 
     quarter = pm.get("quarter", tl.get("quarter", "Q?"))
     year = pm.get("year", tl.get("year", "????"))
@@ -517,10 +515,23 @@ def main():
         json.dump(analysis, f, indent=2)
 
     print(f"📊 Analysis complete. Saved to data/{project}/analysis.json")
-    print("🚀 Generating PDF report...")
 
-    pdf_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "generate_pdf.py")
-    subprocess.run([sys.executable, pdf_script, project])
+    if auto_chain:
+        print("🚀 Generating PDF report...")
+        pdf_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "generate_pdf.py")
+        subprocess.run([sys.executable, pdf_script, project])
+
+    return True
+
+
+def main():
+    project = sys.argv[1] if len(sys.argv) > 1 else find_latest_project()
+    if not project:
+        print("Error: no project specified and no project with both submissions was found.")
+        sys.exit(1)
+
+    success = run_agent(project)
+    sys.exit(0 if success else 1)
 
 
 if __name__ == "__main__":

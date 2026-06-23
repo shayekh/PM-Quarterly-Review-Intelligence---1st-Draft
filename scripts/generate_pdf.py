@@ -92,7 +92,7 @@ def load_required(project):
     missing = [name for name, path in paths.items() if not os.path.exists(path)]
     if missing:
         print(f"Error: missing required file(s) for '{project}': {', '.join(missing)}")
-        sys.exit(1)
+        return None, None, None
 
     loaded = {}
     for name, path in paths.items():
@@ -330,15 +330,13 @@ def build_pdf(project, pm, tl, analysis, out_path):
     doc.build(story)
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Error: project name is required, e.g. `python generate_pdf.py ProjectName`")
-        sys.exit(1)
-
-    project = sys.argv[1]
+def run_pdf(project, auto_chain=True):
+    """Generates the PDF report for `project`. Returns True on success, False on failure."""
     print(f"📄 Generating PDF report for {project}...")
 
     pm, tl, analysis = load_required(project)
+    if pm is None:
+        return False
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     quarter = analysis.get("quarter", "Q?")
@@ -349,10 +347,22 @@ def main():
 
     rel_path = os.path.relpath(out_path, BASE_DIR).replace("\\", "/")
     print(f"✅ PDF saved to {rel_path}")
-    print("🚀 Triggering email scheduler...")
 
-    scheduler_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scheduler.py")
-    subprocess.run([sys.executable, scheduler_script, project])
+    if auto_chain:
+        print("🚀 Triggering email scheduler...")
+        scheduler_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scheduler.py")
+        subprocess.run([sys.executable, scheduler_script, project])
+
+    return True
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Error: project name is required, e.g. `python generate_pdf.py ProjectName`")
+        sys.exit(1)
+
+    success = run_pdf(sys.argv[1])
+    sys.exit(0 if success else 1)
 
 
 if __name__ == "__main__":

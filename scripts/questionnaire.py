@@ -53,19 +53,23 @@ def current_quarter_year():
     return f"Q{quarter}", str(now.year)
 
 
-def main():
+def run_questionnaire(preset_role=None, preset_project=None, auto_chain=True):
+    """Runs the Q&A session. Returns the project name on success, or None if blocked/aborted."""
     header("PM Quarterly Review Intelligence")
     print("Hi! Let's get your quarterly review session started.")
 
-    role_choice = ask_choice(
-        "\nWhat is your role?", {"1": "Product Manager", "2": "Tech Lead"}
-    )
-    role = "PM" if role_choice == "1" else "TL"
+    if preset_role in ("PM", "TL"):
+        role = preset_role
+    else:
+        role_choice = ask_choice(
+            "\nWhat is your role?", {"1": "Product Manager", "2": "Tech Lead"}
+        )
+        role = "PM" if role_choice == "1" else "TL"
     role_label = "Product Manager" if role == "PM" else "Tech Lead"
     print(f"\nRole set to: {role_label}")
 
     header("Project")
-    project = ask_text("What is the project name?")
+    project = preset_project if preset_project else ask_text("What is the project name?")
     project_dir = os.path.join(DATA_DIR, project)
     pm_path = os.path.join(project_dir, "pm_answers.json")
     tl_path = os.path.join(project_dir, "tl_answers.json")
@@ -82,7 +86,7 @@ def main():
                 "\nPM has not submitted yet for this project. "
                 "Please ask PM to complete their session first."
             )
-            sys.exit(0)
+            return None
         print(f"Project '{project}' found. Linked to PM submission.")
 
     header("Q1 — Executive Summary")
@@ -157,9 +161,18 @@ def main():
     else:
         print(f"✅ Tech Lead submission saved for {project}")
         if os.path.exists(pm_path):
-            print("Both submissions found. Triggering analysis agent...")
-            agent_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "agent.py")
-            subprocess.run([sys.executable, agent_script, project])
+            if auto_chain:
+                print("Both submissions found. Triggering analysis agent...")
+                agent_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "agent.py")
+                subprocess.run([sys.executable, agent_script, project])
+            else:
+                print("Both submissions found.")
+
+    return project
+
+
+def main():
+    run_questionnaire()
 
 
 if __name__ == "__main__":

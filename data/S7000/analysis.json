@@ -2,7 +2,7 @@
   "project": "S7000",
   "quarter": "Q2",
   "year": "2026",
-  "generated_at": "2026-06-23T04:31:42.120570",
+  "generated_at": "2026-06-23T15:21:53.922394",
   "section_findings": [
     {
       "question": "executive_summary",
@@ -42,10 +42,10 @@
   ],
   "patterns": {
     "recurring_themes": [
-      "'customer' comes up repeatedly across PM and Tech Lead answers",
       "'portal' comes up repeatedly across PM and Tech Lead answers",
-      "'enhancement' comes up repeatedly across PM and Tech Lead answers",
+      "'customer' comes up repeatedly across PM and Tech Lead answers",
       "'sam' comes up repeatedly across PM and Tech Lead answers",
+      "'enhancement' comes up repeatedly across PM and Tech Lead answers",
       "'prod' comes up repeatedly across PM and Tech Lead answers"
     ],
     "critical_misalignments": [

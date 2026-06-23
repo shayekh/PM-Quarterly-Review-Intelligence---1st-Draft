@@ -38,7 +38,7 @@ def load_required(project):
 
     if not os.path.exists(pm_path):
         print(f"Error: missing data/{project}/pm_answers.json")
-        sys.exit(1)
+        return None, None, None, None
     with open(pm_path, "r", encoding="utf-8") as f:
         pm = json.load(f)
 
@@ -47,7 +47,7 @@ def load_required(project):
     pdf_path = os.path.join(OUTPUT_DIR, f"{project}_{quarter}_{year}.pdf")
     if not os.path.exists(pdf_path):
         print(f"Error: missing {os.path.relpath(pdf_path, BASE_DIR)}")
-        sys.exit(1)
+        return None, None, None, None
 
     tl = None
     tl_path = os.path.join(project_dir, "tl_answers.json")
@@ -109,17 +109,15 @@ def build_email_html(project, quarter, year, pm, tl, analysis):
     """
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Error: project name is required, e.g. `python scheduler.py ProjectName`")
-        sys.exit(1)
-
-    project = sys.argv[1]
+def run_scheduler(project):
+    """Sends the report email for `project`. Returns True on success/intentional skip, False on failure."""
     load_dotenv(os.path.join(BASE_DIR, ".env"))
 
     print(f"📧 Email scheduler started for {project}...")
 
     pm, tl, analysis, pdf_path = load_required(project)
+    if pm is None:
+        return False
     quarter = pm.get("quarter", "Q?")
     year = pm.get("year", "????")
 
@@ -135,12 +133,12 @@ def main():
                 f"⏳ Not a quarter-end month. "
                 f"Next send: {MONTH_NAMES[next_month]} {next_year}"
             )
-            sys.exit(0)
+            return True
 
     recipients = pm.get("stakeholder_emails") or []
     if not recipients:
         print(f"Error: no stakeholder_emails found in data/{project}/pm_answers.json")
-        sys.exit(1)
+        return False
 
     subject = f"📊 Quarterly Review Report — {project} {quarter} {year}"
     html = build_email_html(project, quarter, year, pm, tl, analysis)
@@ -198,8 +196,16 @@ def main():
     print(f"📧 Emailed to: {len(sent_to)} stakeholders")
     print(f"📝 Log saved to: data/{project}/email_log.json")
 
-    if not sent_to:
+    return bool(sent_to)
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Error: project name is required, e.g. `python scheduler.py ProjectName`")
         sys.exit(1)
+
+    success = run_scheduler(sys.argv[1])
+    sys.exit(0 if success else 1)
 
 
 if __name__ == "__main__":

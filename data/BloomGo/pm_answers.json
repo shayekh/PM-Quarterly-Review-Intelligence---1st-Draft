@@ -1,0 +1,17 @@
+{
+  "role": "PM",
+  "project": "BloomGo",
+  "quarter": "Q2",
+  "year": "2026",
+  "submitted_at": "2026-06-23T15:29:47.105296",
+  "answers": {
+    "executive_summary": "launch bloomgo app and admin panel",
+    "overall_status": "Green",
+    "key_achievements": "app on prod and adin panel as well",
+    "risks_and_challenges": "procurement issue from clients",
+    "quality_and_team_health": "so far balanced"
+  },
+  "stakeholder_emails": [
+    "shayekhevan@gmail.com"
+  ]
+}
