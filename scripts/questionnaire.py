@@ -121,6 +121,11 @@ def run_questionnaire(preset_role=None, preset_project=None, auto_chain=True):
         "concerns worth noting?"
     )
 
+    header("Q6 — Customer Satisfaction")
+    customer_satisfaction = ask_text(
+        "What was the customer satisfaction score this quarter?"
+    )
+
     stakeholder_emails = None
     if role == "PM":
         header("Stakeholder Emails")
@@ -143,6 +148,7 @@ def run_questionnaire(preset_role=None, preset_project=None, auto_chain=True):
             "key_achievements": key_achievements,
             "risks_and_challenges": risks_and_challenges,
             "quality_and_team_health": quality_and_team_health,
+            "customer_satisfaction": customer_satisfaction,
         },
     }
     if role == "PM":

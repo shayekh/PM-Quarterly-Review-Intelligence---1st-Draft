@@ -21,6 +21,7 @@ QUESTIONS = [
     ("key_achievements", "Key Achievements & Value Delivered"),
     ("risks_and_challenges", "Risks, Issues & Challenges"),
     ("quality_and_team_health", "Quality & Team Health"),
+    ("customer_satisfaction", "Customer Satisfaction"),
 ]
 
 STOPWORDS = {
