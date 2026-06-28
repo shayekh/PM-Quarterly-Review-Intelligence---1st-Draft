@@ -1,6 +1,7 @@
 """Email sending via Resend — TEST_MODE sends immediately, otherwise monthly/quarterly schedule."""
 
 import calendar
+import html
 import json
 import os
 import sys
@@ -83,50 +84,81 @@ def load_required(session):
     return pm, tl, analysis, pdf_path
 
 
-def build_email_html(customer_name, reporting_period, pm, tl, analysis):
-    pm_status = pm["answers"].get("pm_q2", "Unknown")
-    tl_status = tl["answers"].get("tl_q2", "Unknown") if tl else "Unknown"
+def build_status_line(pm_status, tl_status):
+    pm_emoji = STATUS_EMOJI.get(pm_status, "")
+    tl_emoji = STATUS_EMOJI.get(tl_status, "")
+    if pm_status == tl_status:
+        return f"Overall Status: {pm_emoji} {pm_status}"
+    return (
+        f"PM Status: {pm_emoji} {pm_status} · TL Status: {tl_emoji} {tl_status} "
+        f"— Please review misalignment"
+    )
 
-    key_highlight = "No analysis available yet."
-    focus_next = "No analysis available yet."
-    action_required = "No high-urgency items flagged."
 
-    if analysis:
-        ai = analysis.get("ai_generated", {})
-        lessons = ai.get("s11_lessons_learned") or []
-        if lessons:
-            key_highlight = lessons[0].get("lesson", key_highlight)
-        focuses = ai.get("s12_next_quarter_focus") or []
-        if focuses:
-            focus_next = focuses[0].get("focus_area", focus_next)
-        high_items = [m for m in ai.get("s13_management_attention", []) if m.get("urgency") == "High"]
-        if high_items:
-            action_required = high_items[0].get("item", action_required)
+def esc(value):
+    return html.escape(str(value)) if value else ""
 
-    return f"""
-    <div style="font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1f2937;">
-      <h2 style="color: #1e3a5f; margin-bottom: 0;">Quarterly Service Delivery Report</h2>
-      <p style="color: #2563eb; font-weight: bold; margin-top: 4px;">{reporting_period} &mdash; {customer_name}</p>
 
-      <p>Hello,</p>
-      <p>Please find attached the quarterly service delivery report for <strong>{customer_name}</strong>
-         covering {reporting_period}.</p>
+def build_status_html(pm_status, tl_status):
+    pm_emoji = STATUS_EMOJI.get(pm_status, "")
+    tl_emoji = STATUS_EMOJI.get(tl_status, "")
+    if pm_status == tl_status:
+        return f"<strong>Overall Status:</strong> {esc(pm_emoji)} {esc(pm_status)}"
+    return (
+        f"PM Status: {esc(pm_emoji)} {esc(pm_status)} · TL Status: {esc(tl_emoji)} {esc(tl_status)} "
+        f"— Please review misalignment"
+    )
 
-      <h3 style="color: #1e3a5f; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">Quick Summary</h3>
-      <p>
-        PM Status: {STATUS_EMOJI.get(pm_status, '')} {pm_status}<br/>
-        TL Status: {STATUS_EMOJI.get(tl_status, '')} {tl_status}
-      </p>
 
-      <p><strong>Key Highlights:</strong><br/>{key_highlight}</p>
-      <p><strong>Focus Next Quarter:</strong><br/>{focus_next}</p>
-      <p><strong>Action Required:</strong><br/>{action_required}</p>
+def build_email_html(customer_name, reporting_period, prepared_by, analysis):
+    meta = (analysis or {}).get("report_meta", {})
+    pm_status = meta.get("pm_status", "Unknown")
+    tl_status = meta.get("tl_status", "Unknown")
 
-      <p>Full report attached as PDF.</p>
+    s1 = ((analysis or {}).get("section_synthesis", {})).get("s1_executive_summary", {})
+    highlights = s1.get("highlights") or "No highlights available yet."
+    focus_next = s1.get("next_quarter_preview") or "No next-quarter focus available yet."
 
-      <p>Regards,<br/>PM Review Intelligence System</p>
-    </div>
-    """
+    attention_items = ((analysis or {}).get("ai_generated", {})).get("s13_management_attention", [])
+    if attention_items:
+        action_required_lines = []
+        for item in attention_items:
+            action_required_lines.append(
+                f"- {esc(item.get('item', ''))} (Urgency: {esc(item.get('urgency', ''))}, "
+                f"Source: {esc(item.get('source', ''))})<br>"
+                f"&nbsp;&nbsp;{esc(item.get('explanation', ''))}"
+            )
+        action_required = "<br>".join(action_required_lines)
+    else:
+        action_required = "No action items flagged this quarter."
+
+    status_line = build_status_html(pm_status, tl_status)
+
+    return f"""<html><body style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
+<p>Dear Concern,</p>
+
+<p>Please find attached the Quarterly Service Delivery Report for {esc(customer_name)}, covering {esc(reporting_period)}, prepared by {esc(prepared_by)}.</p>
+
+<p style="font-size: 15px; font-weight: bold; color: #1B3A5C; border-bottom: 1px solid #cccccc; padding-bottom: 6px; margin-bottom: 10px;">Quick Summary</p>
+
+<p>{status_line}</p>
+
+<p><strong>Key Highlights:</strong><br>
+{esc(highlights)}</p>
+
+<p><strong>Focus Next Quarter:</strong><br>
+{esc(focus_next)}</p>
+
+<p><strong>Action Required:</strong><br>
+{action_required}</p>
+
+<p>The full report is attached as a PDF. Please review at your earliest convenience.</p>
+
+<p>If you have questions or require further clarification, please reach out to us.</p>
+
+<p>Regards,<br>
+SELISE Digital Platforms</p>
+</body></html>"""
 
 
 def run_scheduler(session):
@@ -164,8 +196,9 @@ def run_scheduler(session):
         print(f"Error: no recipient_emails found in data/{session}/pm_answers.json")
         return False
 
-    subject = f"📊 Quarterly Service Delivery Report — {customer_name} {reporting_period}"
-    html = build_email_html(customer_name, reporting_period, pm, tl, analysis)
+    subject = f"Quarterly Service Delivery Report — {customer_name} | {reporting_period}"
+    prepared_by = pm.get("prepared_by", "") or (analysis or {}).get("report_meta", {}).get("prepared_by", "")
+    body_html = build_email_html(customer_name, reporting_period, prepared_by, analysis)
 
     resend.api_key = os.getenv("RESEND_API_KEY")
     sender = os.getenv("SENDER_EMAIL")
@@ -183,7 +216,7 @@ def run_scheduler(session):
                     "from": sender,
                     "to": email,
                     "subject": subject,
-                    "html": html,
+                    "html": body_html,
                     "attachments": [attachment],
                 }
             )
