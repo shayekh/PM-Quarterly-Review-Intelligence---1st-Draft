@@ -1,0 +1,343 @@
+{
+  "report_meta": {
+    "customer_name": "Baylab",
+    "reporting_period": "Q2 2026",
+    "prepared_by": "Shayekh Ebne Mizan, Product Manager",
+    "date_generated": "2026-06-28",
+    "pm_status": "Amber",
+    "tl_status": "Amber",
+    "status_aligned": true
+  },
+  "section_synthesis": {
+    "s1_executive_summary": {
+      "delivery_focus": "This quarter the delivery team focused on completing the NovaPay merchant onboarding module, stabilising the payment gateway integration, and launching the first version of the analytics dashboard. On the engineering side, this quarter engineering focused on delivering the merchant onboarding APIs, completing Stripe payment gateway integration, building the analytics data pipeline using event sourcing, and upgrading the CI/CD pipeline to support zero-downtime deployments.",
+      "overall_status": "Amber",
+      "highlights": "merchant onboarding module delivered; payment gateway integration with Stripe and local PSPs completed",
+      "areas_requiring_attention": "backend team capacity; local PSP integration still pending final vendor certification",
+      "next_quarter_preview": "Q3 must focus on three things. First, production launch readiness \u2014 hardening deployment pipelines, completing load testing at 3x expected traffic, and resolving all open medium-severity findings."
+    },
+    "s2_service_overview": {
+      "active_services": "Active services include SaaS product delivery, QA, DevOps, and product consulting.",
+      "delivery_model": "Delivery model is a dedicated team operating on two-week sprints.",
+      "key_stakeholders": "Key customer stakeholders are the CTO and Head of Product at NovaPay; internal stakeholders are the Delivery Manager and Account Manager at SELISE.",
+      "team_composition": "Team composition includes 3 backend engineers, 2 frontend engineers, 1 QA engineer, 1 DevOps engineer, and 1 BA.",
+      "reporting_cadence": "Reporting cadence is bi-weekly syncs with the customer and a monthly steering call."
+    },
+    "s3_achievements": [
+      {
+        "achievement": "Merchant onboarding module delivered",
+        "impact": "reduces customer onboarding time from 3 days to under 4 hours, directly enabling NovaPay to scale merchant acquisition"
+      },
+      {
+        "achievement": "Payment gateway integration with Stripe and local PSPs completed",
+        "impact": "unblocks live transaction processing for the first 50 pilot merchants"
+      },
+      {
+        "achievement": "Analytics dashboard v1 launched",
+        "impact": "gives NovaPay's ops team real-time visibility into transaction volumes, failure rates, and merchant activity"
+      },
+      {
+        "achievement": "Security audit passed with no critical findings",
+        "impact": "strengthens customer confidence ahead of the planned public launch in Q3"
+      },
+      {
+        "achievement": "Merchant onboarding APIs built and deployed",
+        "impact": "all endpoints documented, test coverage at 87%"
+      },
+      {
+        "achievement": "Stripe integration completed with webhook support for real-time",
+        "impact": "payment events"
+      }
+    ],
+    "s4_delivery_summary": [
+      {
+        "workstream": "Merchant Onboarding Module",
+        "status": "Green",
+        "summary": "delivered on time, UAT signed off by customer, live in staging",
+        "notes": ""
+      },
+      {
+        "workstream": "Payment Gateway Integration",
+        "status": "Amber",
+        "summary": "Stripe integration complete, local PSP integration delayed by 3 weeks due to API documentation issues on vendor side, now resolved",
+        "notes": ""
+      },
+      {
+        "workstream": "Analytics Dashboard v1",
+        "status": "Green",
+        "summary": "launched with core metrics, additional KPIs deferred to Q3",
+        "notes": ""
+      },
+      {
+        "workstream": "Infrastructure & DevOps",
+        "status": "Amber",
+        "summary": "CI/CD pipeline upgraded but production deployment faced two rollback incidents during the quarter",
+        "notes": ""
+      },
+      {
+        "workstream": "Security & Compliance",
+        "status": "Green",
+        "summary": "audit completed, all medium findings remediated",
+        "notes": ""
+      }
+    ],
+    "s5_metrics": [
+      {
+        "metric": "SLA Compliance",
+        "target": "95%",
+        "actual": "91%",
+        "status": "Amber",
+        "comment": "SLA compliance: target 95%, actual 91%."
+      },
+      {
+        "metric": "Ticket Resolution Rate",
+        "target": "90%",
+        "actual": "89.5%",
+        "status": "Amber",
+        "comment": "34.0 of 38 tickets resolved this quarter."
+      },
+      {
+        "metric": "Average Response Time",
+        "target": "4 hours",
+        "actual": "3.2 hours",
+        "status": "Green",
+        "comment": "Average ticket response time: target 4 hours, actual 3.2 hours."
+      },
+      {
+        "metric": "Average Resolution Time",
+        "target": "N/A",
+        "actual": "N/A",
+        "status": "N/A",
+        "comment": "Not reported this quarter."
+      },
+      {
+        "metric": "Release Success Rate",
+        "target": "90%",
+        "actual": "85%",
+        "status": "Red",
+        "comment": "Release success rate: target 90%, actual 85% due to two rollback incidents."
+      },
+      {
+        "metric": "Defect Leakage",
+        "target": "5%",
+        "actual": "7%",
+        "status": "Red",
+        "comment": "Defect leakage to production: target below 5%, actual 7%."
+      },
+      {
+        "metric": "CSAT",
+        "target": "4.0/5.0",
+        "actual": "3.7/5.0",
+        "status": "Red",
+        "comment": "CSAT score: target 4.0/5.0, actual 3.7/5.0."
+      }
+    ],
+    "s6_support_summary": {
+      "ticket_counts": {
+        "total": "38",
+        "resolved": "34",
+        "open": "4",
+        "critical": "0",
+        "major": "2",
+        "recurring": "1"
+      },
+      "major_incidents": [
+        {
+          "date": "June 3 2026",
+          "issue": "production deployment failure on release v2.4.1",
+          "impact": "45 minutes of staging environment downtime affecting UAT session",
+          "root_cause": "misconfigured environment variable in deployment script",
+          "action": "immediate rollback and config fix",
+          "status": "resolved"
+        },
+        {
+          "date": "June 18 2026",
+          "issue": "analytics dashboard returning stale data for 2 hours",
+          "impact": "incorrect metrics shown to customer during demo",
+          "root_cause": "Redis cache invalidation bug introduced in v2.5.0",
+          "action": "hotfix deployed within 3 hours",
+          "status": "resolved and regression test added"
+        }
+      ]
+    },
+    "s7_quality_health": [
+      {
+        "area": "Code Quality",
+        "observation": "Code quality is good overall \u2014 peer review process maintained, average PR review time is 18 hours.",
+        "status": "Green",
+        "improvement_action": "Maintain current code quality practices into next quarter."
+      },
+      {
+        "area": "QA",
+        "observation": "QA has been thorough but slightly under-resourced with one QA engineer covering the full scope, leading to some test cases deferred.",
+        "status": "Amber",
+        "improvement_action": "Define a corrective action plan for qa ahead of next quarter."
+      },
+      {
+        "area": "Release Management",
+        "observation": "Release management improved with blue-green deployment but the two rollback incidents highlighted gaps in pre-release environment variable validation.",
+        "status": "Red",
+        "improvement_action": "Define a corrective action plan for release management ahead of next quarter."
+      },
+      {
+        "area": "Documentation",
+        "observation": "Documentation is adequate for APIs but internal architecture docs are behind \u2014 this is tech debt we need to address in Q3.",
+        "status": "Amber",
+        "improvement_action": "Address in Q3"
+      },
+      {
+        "area": "Communication",
+        "observation": "Team communication is strong internally.",
+        "status": "Green",
+        "improvement_action": "Maintain current communication practices into next quarter."
+      },
+      {
+        "area": "Team Stability",
+        "observation": "Team stability is good \u2014 no attrition, though the backend team is operating at near full capacity with limited buffer for unplanned work.",
+        "status": "Amber",
+        "improvement_action": "Define a corrective action plan for team stability ahead of next quarter."
+      }
+    ],
+    "s8_risks": [
+      {
+        "type": "Risk",
+        "description": "Backend team capacity",
+        "impact": "High",
+        "owner": "Delivery Manager",
+        "mitigation": "to evaluate adding one backend engineer for Q3 before public launch peak"
+      },
+      {
+        "type": "Risk",
+        "description": "Local PSP integration still pending final vendor certification",
+        "impact": "Medium",
+        "owner": "BA",
+        "mitigation": "weekly follow-up with vendor and parallel preparation of fallback flow"
+      },
+      {
+        "type": "Issue",
+        "description": "Architecture documentation gap",
+        "impact": "Medium",
+        "owner": "Tech Lead",
+        "mitigation": "to allocate 2 hours per week in Q3 for documentation catch-up"
+      },
+      {
+        "type": "Dependency",
+        "description": "NovaPay infrastructure team needs to provision production environment by July 15 for Q3 launch readiness",
+        "impact": "High",
+        "owner": "NovaPay CTO",
+        "mitigation": "formal written request sent June 25"
+      }
+    ],
+    "s9_customer_feedback": {
+      "satisfaction": "Customer satisfaction is moderate this quarter.",
+      "communication": "Communication has been consistent with bi-weekly calls maintained throughout.",
+      "responsiveness": "Responsiveness from SELISE side has been strong \u2014 no missed SLAs on communication.",
+      "business_alignment": "Business alignment is good overall, with the customer confirming Q3 priorities around public launch readiness.",
+      "areas_of_concern": "NovaPay's CTO expressed appreciation for the onboarding module delivery but raised concerns about the PSP integration delay and the production rollback incidents.",
+      "relationship_health": "Amber"
+    }
+  },
+  "ai_generated": {
+    "s10_value_delivered": {
+      "business_value": "Delivery of Merchant onboarding module delivered, Payment gateway integration with Stripe and local PSPs completed translated into measurable customer-facing gains, against a backdrop of 3.7/5.0 CSAT versus a 4.0/5.0 target.",
+      "operational_value": "34 of 38 support tickets were resolved with 0 critical incidents, though 2 major incident(s) this quarter point to remaining gaps in release validation.",
+      "technical_value": "Engineering shipped 6 notable technical achievements this quarter, while 4 of 6 quality dimensions still need attention before the next release cycle.",
+      "strategic_value": "The current trajectory positions the team for its next milestone, contingent on resolving 4 open risk/issue/dependency item(s) tracked this quarter."
+    },
+    "s11_lessons_learned": [
+      {
+        "lesson": "Incident on June 3 2026 exposed a gap in misconfigured environment variable in deployment script.",
+        "context": "Impact: 45 minutes of staging environment downtime affecting UAT session. Resolved via: immediate rollback and config fix.",
+        "action": "Add an automated pre-release check that would have caught this class of failure."
+      },
+      {
+        "lesson": "Incident on June 18 2026 exposed a gap in Redis cache invalidation bug introduced in v2.5.0.",
+        "context": "Impact: incorrect metrics shown to customer during demo. Resolved via: hotfix deployed within 3 hours.",
+        "action": "Add an automated pre-release check that would have caught this class of failure."
+      },
+      {
+        "lesson": "QA is trending Amber and needs structural attention, not just a one-off fix.",
+        "context": "QA has been thorough but slightly under-resourced with one QA engineer covering the full scope, leading to some test cases deferred.",
+        "action": "Define a corrective action plan for qa ahead of next quarter."
+      },
+      {
+        "lesson": "Release Management is trending Red and needs structural attention, not just a one-off fix.",
+        "context": "Release management improved with blue-green deployment but the two rollback incidents highlighted gaps in pre-release environment variable validation.",
+        "action": "Define a corrective action plan for release management ahead of next quarter."
+      },
+      {
+        "lesson": "Unresolved high-impact risk could affect delivery if not closed out.",
+        "context": "Backend team capacity",
+        "action": "to evaluate adding one backend engineer for Q3 before public launch peak"
+      },
+      {
+        "lesson": "Unresolved high-impact dependency could affect delivery if not closed out.",
+        "context": "NovaPay infrastructure team needs to provision production environment by July 15 for Q3 launch readiness",
+        "action": "formal written request sent June 25"
+      }
+    ],
+    "s12_next_quarter_focus": [
+      {
+        "focus_area": "production launch readiness \u2014 hardening deployment pipelines, completing load testing at 3x expected traffic, and resolving...",
+        "expected_outcome": "De-risks the upcoming launch milestone.",
+        "owner": "Product Manager, Tech Lead"
+      },
+      {
+        "focus_area": "local PSP integration completion and certification \u2014 this is a blocker for full merchant coverage.",
+        "expected_outcome": "Unblocks full feature/vendor coverage.",
+        "owner": "Tech Lead"
+      },
+      {
+        "focus_area": "addressing tech debt: architecture documentation, test coverage improvement from 87% to above 92%, and resolving the...",
+        "expected_outcome": "Reduces accumulated technical debt and improves maintainability.",
+        "owner": "Tech Lead"
+      },
+      {
+        "focus_area": "add monitoring and alerting improvements before go-live to avoid repeating the stale data incident.'",
+        "expected_outcome": "De-risks the upcoming launch milestone.",
+        "owner": "Product Manager, Tech Lead"
+      }
+    ],
+    "s13_management_attention": [
+      {
+        "item": "Backend team capacity",
+        "type": "Resource",
+        "explanation": "Backend team capacity (Owner: Delivery Manager). Mitigation: to evaluate adding one backend engineer for Q3 before public launch peak.",
+        "urgency": "High",
+        "source": "Tech Lead"
+      },
+      {
+        "item": "NovaPay infrastructure team needs to provision production environment by July...",
+        "type": "Escalation",
+        "explanation": "NovaPay infrastructure team needs to provision production environment by July 15 for Q3 launch readiness (Owner: NovaPay CTO). Mitigation: formal written request sent June 25.",
+        "urgency": "High",
+        "source": "Tech Lead"
+      },
+      {
+        "item": "Customer-raised concern needs a response",
+        "type": "Decision",
+        "explanation": "NovaPay's CTO expressed appreciation for the onboarding module delivery but raised concerns about the PSP integration delay and the production rollback incidents.",
+        "urgency": "Medium",
+        "source": "Product Manager"
+      }
+    ],
+    "s14_closing_note": "This quarter delivered against 6 key achievements while surfacing 2 major incident(s) and 2 high-impact risk(s) that still need closing out. PM and Tech Lead were aligned on 2 of 3 reviewed topics.\n\nHeading into next quarter, the priority is: production launch readiness \u2014 hardening deployment pipelines, completing...; local PSP integration completion and certification \u2014 this...; addressing tech debt: architecture documentation, test coverage improvement.... Tracking these specific items at the next steering call will keep the team ahead of the risks identified this quarter."
+  },
+  "cross_analysis": [
+    {
+      "topic": "delivery_focus",
+      "relationship": "AGREE",
+      "finding": "PM and Tech Lead align on delivery focus \u2014 a confirmed, strong signal."
+    },
+    {
+      "topic": "overall_status",
+      "relationship": "AGREE",
+      "finding": "PM and Tech Lead align on overall status \u2014 a confirmed, strong signal."
+    },
+    {
+      "topic": "achievements",
+      "relationship": "COMPLEMENT",
+      "finding": "PM and Tech Lead bring complementary angles on achievements."
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Master orchestrator — runs the full PM Quarterly Review workflow end to end."""
+"""Master orchestrator — runs the full PM Review Intelligence workflow end to end."""
 
 import os
 import sys
@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(SCRIPTS_DIR)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 sys.path.insert(0, SCRIPTS_DIR)
 
-from questionnaire import run_questionnaire
+from questionnaire import run_questionnaire, session_key, REPORTING_PERIODS, ask_text, ask_choice
 from agent import run_agent
 from generate_pdf import run_pdf
 from scheduler import run_scheduler
@@ -22,13 +22,24 @@ def divider():
     print("─" * 35)
 
 
-def project_paths(project):
-    project_dir = os.path.join(DATA_DIR, project)
+def session_paths(session):
+    session_dir = os.path.join(DATA_DIR, session)
     return {
-        "pm": os.path.join(project_dir, "pm_answers.json"),
-        "tl": os.path.join(project_dir, "tl_answers.json"),
-        "analysis": os.path.join(project_dir, "analysis.json"),
+        "pm": os.path.join(session_dir, "pm_answers.json"),
+        "tl": os.path.join(session_dir, "tl_answers.json"),
+        "analysis": os.path.join(session_dir, "analysis.json"),
     }
+
+
+def prompt_session():
+    print("\nEnter customer / project name:")
+    customer_name = input("> ").strip()
+    while not customer_name:
+        print("Customer name can't be empty.")
+        customer_name = input("> ").strip()
+    period_choice = ask_choice("What is the reporting period?", REPORTING_PERIODS)
+    reporting_period = REPORTING_PERIODS[period_choice]
+    return customer_name, reporting_period
 
 
 def run_with_retry(step_name, func, *args, **kwargs):
@@ -54,7 +65,7 @@ def run_with_retry(step_name, func, *args, **kwargs):
 
 def main():
     print("╔════════════════════════════════════════╗")
-    print("║   PM Quarterly Review Intelligence     ║")
+    print("║   PM Review Intelligence               ║")
     print("║   Agentic Workflow                     ║")
     print("╚════════════════════════════════════════╝")
 
@@ -73,13 +84,9 @@ def main():
             break
         print("Please enter a number from 1-6.")
 
-    print("\nEnter project name:")
-    project = input("> ").strip()
-    while not project:
-        print("Project name can't be empty.")
-        project = input("> ").strip()
-
-    paths = project_paths(project)
+    customer_name, reporting_period = prompt_session()
+    session = session_key(customer_name, reporting_period)
+    paths = session_paths(session)
 
     if mode == "1":
         divider()
@@ -87,7 +94,7 @@ def main():
         divider()
         run_with_retry(
             "PM Q&A session",
-            lambda: run_questionnaire(preset_role="PM", preset_project=project, auto_chain=False),
+            lambda: run_questionnaire(preset_role="PM", preset_session=(customer_name, reporting_period), auto_chain=False),
         )
 
         divider()
@@ -95,30 +102,29 @@ def main():
         divider()
         run_with_retry(
             "Tech Lead Q&A session",
-            lambda: run_questionnaire(preset_role="TL", preset_project=project, auto_chain=False),
+            lambda: run_questionnaire(preset_role="TL", preset_session=(customer_name, reporting_period), auto_chain=False),
         )
 
         divider()
         print("🤖 STEP 3 OF 5 — AI Agent Analysis")
         divider()
-        run_with_retry("AI Agent Analysis", run_agent, project, auto_chain=False)
+        run_with_retry("AI Agent Analysis", run_agent, session, auto_chain=False)
 
         divider()
         print("📄 STEP 4 OF 5 — Generating PDF")
         divider()
-        run_with_retry("PDF generation", run_pdf, project, auto_chain=False)
+        run_with_retry("PDF generation", run_pdf, session, auto_chain=False)
 
         divider()
         print("📧 STEP 5 OF 5 — Sending Email")
         divider()
-        run_with_retry("Email send", run_scheduler, project)
+        run_with_retry("Email send", run_scheduler, session)
 
         import json
         with open(paths["pm"], "r", encoding="utf-8") as f:
             pm = json.load(f)
-        quarter, year = pm.get("quarter", "Q?"), pm.get("year", "????")
-        recipients = pm.get("stakeholder_emails") or []
-        pdf_rel = f"output/{project}_{quarter}_{year}.pdf"
+        recipients = pm.get("recipient_emails") or []
+        pdf_rel = f"output/{session}.pdf"
 
         inner_width = 40
 
@@ -128,7 +134,7 @@ def main():
         print(f"╔{'═' * inner_width}╗")
         box_line("   ✅ WORKFLOW COMPLETE")
         box_line()
-        box_line(f"   Project:  {project}")
+        box_line(f"   Customer: {customer_name}")
         box_line(f"   Report:   {pdf_rel}")
         box_line(f"   Emailed:  {len(recipients)} stakeholders")
         print(f"╚{'═' * inner_width}╝")
@@ -136,48 +142,44 @@ def main():
     elif mode == "2":
         run_with_retry(
             "PM Q&A session",
-            lambda: run_questionnaire(preset_role="PM", preset_project=project, auto_chain=False),
+            lambda: run_questionnaire(preset_role="PM", preset_session=(customer_name, reporting_period), auto_chain=False),
         )
         print("✅ PM turn complete. Run TL turn next.")
 
     elif mode == "3":
         if not os.path.exists(paths["pm"]):
             print(
-                f"Error: pm_answers.json not found for '{project}'. "
+                f"Error: pm_answers.json not found for '{session}'. "
                 "PM must complete their turn first."
             )
             sys.exit(1)
         run_with_retry(
             "Tech Lead Q&A session",
-            lambda: run_questionnaire(preset_role="TL", preset_project=project, auto_chain=False),
+            lambda: run_questionnaire(preset_role="TL", preset_session=(customer_name, reporting_period), auto_chain=False),
         )
         print("✅ TL turn complete.")
 
     elif mode == "4":
         missing = [name for name in ("pm", "tl") if not os.path.exists(paths[name])]
         if missing:
-            print(f"Error: missing {', '.join(f'{m}_answers.json' for m in missing)} for '{project}'.")
+            print(f"Error: missing {', '.join(f'{m}_answers.json' for m in missing)} for '{session}'.")
             sys.exit(1)
-        run_with_retry("AI Agent Analysis", run_agent, project, auto_chain=False)
+        run_with_retry("AI Agent Analysis", run_agent, session, auto_chain=False)
         print("✅ Analysis complete.")
 
     elif mode == "5":
         if not os.path.exists(paths["analysis"]):
-            print(f"Error: analysis.json not found for '{project}'. Run analysis first.")
+            print(f"Error: analysis.json not found for '{session}'. Run analysis first.")
             sys.exit(1)
-        run_with_retry("PDF generation", run_pdf, project, auto_chain=False)
+        run_with_retry("PDF generation", run_pdf, session, auto_chain=False)
         print("✅ PDF generated.")
 
     elif mode == "6":
-        import json
-        with open(paths["pm"], "r", encoding="utf-8") as f:
-            pm = json.load(f) if os.path.exists(paths["pm"]) else {}
-        quarter, year = pm.get("quarter", "Q?"), pm.get("year", "????")
-        pdf_path = os.path.join(BASE_DIR, "output", f"{project}_{quarter}_{year}.pdf")
+        pdf_path = os.path.join(BASE_DIR, "output", f"{session}.pdf")
         if not os.path.exists(pdf_path):
-            print(f"Error: PDF not found for '{project}' (expected output/{project}_{quarter}_{year}.pdf).")
+            print(f"Error: PDF not found for '{session}' (expected output/{session}.pdf).")
             sys.exit(1)
-        run_with_retry("Email send", run_scheduler, project)
+        run_with_retry("Email send", run_scheduler, session)
         print("✅ Email sent.")
 
 

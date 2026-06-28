@@ -1,0 +1,21 @@
+{
+  "role": "PM",
+  "customer_name": "Baylab",
+  "reporting_period": "Q2 2026",
+  "prepared_by": "Shayekh Ebne Mizan, Product Manager",
+  "recipient_emails": [
+    "shayekh.mizan@gmail.com",
+    "shayekhevan@gmail.com"
+  ],
+  "submitted_at": "2026-06-28T03:20:27.454348",
+  "answers": {
+    "pm_q1": "This quarter the delivery team focused on completing the NovaPay merchant onboarding module, stabilising the payment gateway integration, and launching the first version of the analytics dashboard. Key activities included three major feature releases, two rounds of UAT with the customer, a security audit on the payment APIs, and ongoing performance optimisation of the transaction processing pipeline.",
+    "pm_q2": "Amber",
+    "pm_q3": "Active services include SaaS product delivery, QA, DevOps, and product consulting. Delivery model is a dedicated team operating on two-week sprints. Key customer stakeholders are the CTO and Head of Product at NovaPay; internal stakeholders are the Delivery Manager and Account Manager at SELISE. Team composition includes 3 backend engineers, 2 frontend engineers, 1 QA engineer, 1 DevOps engineer, and 1 BA. Reporting cadence is bi-weekly syncs with the customer and a monthly steering call.",
+    "pm_q4": "1. Merchant onboarding module delivered \u2014 reduces customer onboarding time from 3 days to under 4 hours, directly enabling NovaPay to scale merchant acquisition. 2. Payment gateway integration with Stripe and local PSPs completed \u2014 unblocks live transaction processing for the first 50 pilot merchants. 3. Analytics dashboard v1 launched \u2014 gives NovaPay's ops team real-time visibility into transaction volumes, failure rates, and merchant activity. 4. Security audit passed with no critical findings \u2014 strengthens customer confidence ahead of the planned public launch in Q3.",
+    "pm_q5": "Merchant Onboarding Module: Green \u2014 delivered on time, UAT signed off by customer, live in staging. Payment Gateway Integration: Amber \u2014 Stripe integration complete, local PSP integration delayed by 3 weeks due to API documentation issues on vendor side, now resolved. Analytics Dashboard v1: Green \u2014 launched with core metrics, additional KPIs deferred to Q3. Infrastructure & DevOps: Amber \u2014 CI/CD pipeline upgraded but production deployment faced two rollback incidents during the quarter. Security & Compliance: Green \u2014 audit completed, all medium findings remediated.",
+    "pm_q6": "CSAT score: target 4.0/5.0, actual 3.7/5.0. SLA compliance: target 95%, actual 91%. Release success rate: target 90%, actual 85% due to two rollback incidents. Average ticket response time: target 4 hours, actual 3.2 hours. Defect leakage to production: target below 5%, actual 7%.",
+    "pm_q7": "Customer satisfaction is moderate this quarter. NovaPay's CTO expressed appreciation for the onboarding module delivery but raised concerns about the PSP integration delay and the production rollback incidents. Communication has been consistent with bi-weekly calls maintained throughout. Responsiveness from SELISE side has been strong \u2014 no missed SLAs on communication. Business alignment is good overall, with the customer confirming Q3 priorities around public launch readiness. Key areas of concern are the two rollback incidents which shook confidence, and a request from the customer for a more structured incident communication process going forward.",
+    "pm_q8": "Amber"
+  }
+}

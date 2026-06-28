@@ -1,0 +1,13 @@
+{
+  "session": "Baylab_Q2_2026",
+  "customer_name": "Baylab",
+  "reporting_period": "Q2 2026",
+  "sent_at": "2026-06-28T06:56:24.703839",
+  "recipients": [
+    "shayekh.mizan@gmail.com",
+    "shayekhevan@gmail.com"
+  ],
+  "status": "sent",
+  "test_mode": true,
+  "schedule_mode": "monthly"
+}
